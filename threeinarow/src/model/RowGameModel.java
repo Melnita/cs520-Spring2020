@@ -10,7 +10,7 @@ public class RowGameModel
     /**
      * The current player taking their turn
      */
-    public String player = "1";
+    public RowGamePlayer player = RowGamePlayer.PLAYER_1;
     public int movesLeft = 9;
 
     private String finalResult = null;

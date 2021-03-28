@@ -8,6 +8,7 @@ import javax.swing.JTextArea;
 
 import controller.RowGameController;
 import model.RowGameModel;
+import model.RowGamePlayer;
 
 
 public class RowGameStatusView implements RowGameView
@@ -25,7 +26,7 @@ public class RowGameStatusView implements RowGameView
 
     public void update(RowGameModel gameModel) {
 	if (gameModel.getFinalResult() == null) {
-	    if (gameModel.player.equals("1")) {
+	    if (gameModel.player.equals(RowGamePlayer.PLAYER_1)) {
 		playerturn.setText("Player 1 to play 'X'");
 	    }
 	    else {
