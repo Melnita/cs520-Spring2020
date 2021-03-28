@@ -12,12 +12,12 @@ import controller.RowGameController;
 
 public class RowGameGUI implements RowGameView
 {
-    public JFrame gui = new JFrame("Three in a Row");
+    JFrame gui = new JFrame(RowGameMessage.ROWGAME_NAME);
     public RowGameBoardView gameBoardView;
-    public JButton reset = new JButton("Reset");
-    public RowGameStatusView gameStatusView;
+    JButton reset = new JButton(RowGameMessage.ROWGAME_RESET);
+    RowGameStatusView gameStatusView;
     
-    private RowGameController gameController;
+    RowGameController gameController;
 
 
     /**
@@ -60,5 +60,14 @@ public class RowGameGUI implements RowGameView
 	gameBoardView.update(gameModel);
 
 	gameStatusView.update(gameModel);
+    }
+
+    public void makeVisible(){
+        this.gui.setVisible(true);
+    }
+
+    public static class RowGameMessage{
+        public static final String ROWGAME_NAME = "Three in a Row";
+        public static final String ROWGAME_RESET = "Reset";
     }
 }

@@ -5,5 +5,5 @@ import model.RowGameModel;
 
 public interface RowGameView
 {
-    public void update(RowGameModel gameModel);
+    void update(RowGameModel gameModel);
 }

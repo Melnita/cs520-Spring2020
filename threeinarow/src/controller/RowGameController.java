@@ -44,7 +44,7 @@ public class RowGameController {
     }
 
     public void startUp() {
-	gameView.gui.setVisible(true);
+	gameView.makeVisible();
     }
 
     /**
