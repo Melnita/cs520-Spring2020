@@ -6,7 +6,14 @@ import javax.swing.JTextArea;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
+import model.RowBlockModel;
 import model.RowGameModel;
 import model.RowGamePlayer;
 import view.RowGameGUI;
@@ -57,332 +64,22 @@ public class RowGameController {
 
 	RowGamePlayer player = gameModel.player;
 	int movesLeft = gameModel.movesLeft;
-	if(player.equals(RowGamePlayer.PLAYER_1)) {
-	    // Check whether player 1 won
-	    if(block==gameView.gameBoardView.blocks[0][0]) {
-		gameModel.blocksData[0][0].setContents("X");
-		gameModel.blocksData[0][0].setIsLegalMove(false);
-		gameModel.player = RowGamePlayer.PLAYER_2;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[0][0].getContents().equals(gameModel.blocksData[0][1].getContents()) &&
-			gameModel.blocksData[0][1].getContents().equals(gameModel.blocksData[0][2].getContents())) ||
-		       (gameModel.blocksData[0][0].getContents().equals(gameModel.blocksData[1][0].getContents()) &&
-			gameModel.blocksData[1][0].getContents().equals(gameModel.blocksData[2][0].getContents())) ||
-		       (gameModel.blocksData[0][0].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[2][2].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[0][1]) {
-		gameModel.blocksData[0][1].setContents("X");
-		gameModel.blocksData[0][1].setIsLegalMove(false);
-		gameModel.player = RowGamePlayer.PLAYER_2;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[0][1].getContents().equals(gameModel.blocksData[0][0].getContents()) &&
-			gameModel.blocksData[0][0].getContents().equals(gameModel.blocksData[0][2].getContents())) ||
-		       (gameModel.blocksData[0][1].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[2][1].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[0][2]) {
-		gameModel.blocksData[0][2].setContents("X");
-		gameModel.blocksData[0][2].setIsLegalMove(false);
-		gameModel.player = RowGamePlayer.PLAYER_2;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[0][2].getContents().equals(gameModel.blocksData[0][1].getContents()) &&
-			gameModel.blocksData[0][1].getContents().equals(gameModel.blocksData[0][0].getContents())) ||
-		       (gameModel.blocksData[0][2].getContents().equals(gameModel.blocksData[1][2].getContents()) &&
-			gameModel.blocksData[1][2].getContents().equals(gameModel.blocksData[2][2].getContents())) ||
-		       (gameModel.blocksData[0][2].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[2][0].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[1][0]) {
-		gameModel.blocksData[1][0].setContents("X");
-		gameModel.blocksData[1][0].setIsLegalMove(false);
-		// Enable the space on top of this one
-		gameModel.blocksData[0][0].setIsLegalMove(true);
-		gameModel.player = RowGamePlayer.PLAYER_2;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[1][0].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[1][2].getContents())) ||
-		       (gameModel.blocksData[1][0].getContents().equals(gameModel.blocksData[0][0].getContents()) &&
-			gameModel.blocksData[0][0].getContents().equals(gameModel.blocksData[2][0].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[1][1]) {
-		gameModel.blocksData[1][1].setContents("X");
-		gameModel.blocksData[1][1].setIsLegalMove(false);
-		// Enable the space on top of this one
-		gameModel.blocksData[0][1].setIsLegalMove(true);
-			gameModel.player = RowGamePlayer.PLAYER_2;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[1][0].getContents()) &&
-			gameModel.blocksData[1][0].getContents().equals(gameModel.blocksData[1][2].getContents())) ||
-		       (gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[0][1].getContents()) &&
-			gameModel.blocksData[0][1].getContents().equals(gameModel.blocksData[2][1].getContents())) ||
-		       (gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[0][0].getContents()) &&
-			gameModel.blocksData[0][0].getContents().equals(gameModel.blocksData[2][2].getContents())) ||
-		       (gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[0][2].getContents()) &&
-			gameModel.blocksData[0][2].getContents().equals(gameModel.blocksData[2][0].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[1][2]) {
-		gameModel.blocksData[1][2].setContents("X");
-		gameModel.blocksData[1][2].setIsLegalMove(false);
-		// Enable the space on top of this one
-		gameModel.blocksData[0][2].setIsLegalMove(true);
-		gameModel.player = RowGamePlayer.PLAYER_2;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[1][2].getContents().equals(gameModel.blocksData[0][2].getContents()) &&
-			gameModel.blocksData[0][2].getContents().equals(gameModel.blocksData[2][2].getContents())) ||
-		       (gameModel.blocksData[1][2].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[1][0].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[2][0]) {
-		gameModel.blocksData[2][0].setContents("X");
-		gameModel.blocksData[2][0].setIsLegalMove(false);
-		// Enable the space on top of this one
-		gameModel.blocksData[1][0].setIsLegalMove(true);
-		gameModel.player = RowGamePlayer.PLAYER_2;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[2][0].getContents().equals(gameModel.blocksData[2][1].getContents()) &&
-			gameModel.blocksData[2][1].getContents().equals(gameModel.blocksData[2][2].getContents())) ||
-		       (gameModel.blocksData[2][0].getContents().equals(gameModel.blocksData[1][0].getContents()) &&
-			gameModel.blocksData[1][0].getContents().equals(gameModel.blocksData[0][0].getContents())) ||
-		       (gameModel.blocksData[2][0].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[0][2].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-		       gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[2][1]) {
-		gameModel.blocksData[2][1].setContents("X");
-		gameModel.blocksData[2][1].setIsLegalMove(false);
-		// Enabled the space on top of this one
-		gameModel.blocksData[1][1].setIsLegalMove(true);
-		gameModel.player = RowGamePlayer.PLAYER_2;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[2][1].getContents().equals(gameModel.blocksData[2][0].getContents()) &&
-			gameModel.blocksData[2][0].getContents().equals(gameModel.blocksData[2][2].getContents())) ||
-		       (gameModel.blocksData[2][1].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[0][1].getContents()))) {
-		        gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[2][2]) {
-		gameModel.blocksData[2][2].setContents("X");
-		gameModel.blocksData[2][2].setIsLegalMove(false);
-		// Enable the space on top of this one
-		gameModel.blocksData[1][2].setIsLegalMove(true);
-		gameModel.player = RowGamePlayer.PLAYER_2;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[2][2].getContents().equals(gameModel.blocksData[2][1].getContents()) &&
-			gameModel.blocksData[2][1].getContents().equals(gameModel.blocksData[2][0].getContents())) ||
-		       (gameModel.blocksData[2][2].getContents().equals(gameModel.blocksData[1][2].getContents()) &&
-			gameModel.blocksData[1][2].getContents().equals(gameModel.blocksData[0][2].getContents())) ||
-		       (gameModel.blocksData[2][2].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[0][0].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    }
-	} else {
-	    // Check whether player 2 won
-	    if(block==gameView.gameBoardView.blocks[0][0]) {
-		gameModel.blocksData[0][0].setContents("O");
-		gameModel.blocksData[0][0].setIsLegalMove(false);
-		gameModel.player = RowGamePlayer.PLAYER_1;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[0][0].getContents().equals(gameModel.blocksData[0][1].getContents()) &&
-			gameModel.blocksData[0][1].getContents().equals(gameModel.blocksData[0][2].getContents())) ||
-		       (gameModel.blocksData[0][0].getContents().equals(gameModel.blocksData[1][0].getContents()) &&
-			gameModel.blocksData[1][0].getContents().equals(gameModel.blocksData[2][0].getContents())) ||
-		       (gameModel.blocksData[0][0].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[2][2].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[0][1]) {
-		gameModel.blocksData[0][1].setContents("O");
-		gameModel.blocksData[0][1].setIsLegalMove(false);
-		gameModel.player = RowGamePlayer.PLAYER_1;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[0][1].getContents().equals(gameModel.blocksData[0][0].getContents()) &&
-			gameModel.blocksData[0][0].getContents().equals(gameModel.blocksData[0][2].getContents())) ||
-		       (gameModel.blocksData[0][1].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[2][1].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[0][2]) {
-		gameModel.blocksData[0][2].setContents("O");
-		gameModel.blocksData[0][2].setIsLegalMove(false);
-		gameModel.player = RowGamePlayer.PLAYER_1;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[0][2].getContents().equals(gameModel.blocksData[0][1].getContents()) &&
-			gameModel.blocksData[0][1].getContents().equals(gameModel.blocksData[0][0].getContents())) ||
-		       (gameModel.blocksData[0][2].getContents().equals(gameModel.blocksData[1][2].getContents()) &&
-			gameModel.blocksData[1][2].getContents().equals(gameModel.blocksData[2][2].getContents())) ||
-		       (gameModel.blocksData[0][2].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[2][0].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[1][0]) {
-		gameModel.blocksData[1][0].setContents("O");
-		gameModel.blocksData[1][0].setIsLegalMove(false);
-		// Enable the space on top of this one
-		gameModel.blocksData[0][0].setIsLegalMove(true);
-		gameModel.player = RowGamePlayer.PLAYER_1;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[1][0].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[1][2].getContents())) ||
-		       (gameModel.blocksData[1][0].getContents().equals(gameModel.blocksData[0][0].getContents()) &&
-			gameModel.blocksData[0][0].getContents().equals(gameModel.blocksData[2][0].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[1][1]) {
-		gameModel.blocksData[1][1].setContents("O");
-		gameModel.blocksData[1][1].setIsLegalMove(false);
-		// Enable the space on top of this one
-		gameModel.blocksData[0][1].setIsLegalMove(true);
-		gameModel.player = RowGamePlayer.PLAYER_1;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[1][0].getContents()) &&
-			gameModel.blocksData[1][0].getContents().equals(gameModel.blocksData[1][2].getContents())) ||
-		       (gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[0][1].getContents()) &&
-			gameModel.blocksData[0][1].getContents().equals(gameModel.blocksData[2][1].getContents())) ||
-		       (gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[0][0].getContents()) &&
-			gameModel.blocksData[0][0].getContents().equals(gameModel.blocksData[2][2].getContents())) ||
-		       (gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[0][2].getContents()) &&
-			gameModel.blocksData[0][2].getContents().equals(gameModel.blocksData[2][0].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[1][2]) {
-		gameModel.blocksData[1][2].setContents("O");
-		gameModel.blocksData[1][2].setIsLegalMove(false);
-		// Enable the space on top of this one
-		gameModel.blocksData[0][2].setIsLegalMove(true);
-		gameModel.player = RowGamePlayer.PLAYER_1;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[1][2].getContents().equals(gameModel.blocksData[0][2].getContents()) &&
-			gameModel.blocksData[0][2].getContents().equals(gameModel.blocksData[2][2].getContents())) ||
-		       (gameModel.blocksData[1][2].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[1][0].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[2][0]) {
-		gameModel.blocksData[2][0].setContents("O");
-		gameModel.blocksData[2][0].setIsLegalMove(false);
-		// Enable the space on top of this one
-		gameModel.blocksData[1][0].setIsLegalMove(true);
-		gameModel.player = RowGamePlayer.PLAYER_1;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[2][0].getContents().equals(gameModel.blocksData[2][1].getContents()) &&
-			gameModel.blocksData[2][1].getContents().equals(gameModel.blocksData[2][2].getContents())) ||
-		       (gameModel.blocksData[2][0].getContents().equals(gameModel.blocksData[1][0].getContents()) &&
-			gameModel.blocksData[1][0].getContents().equals(gameModel.blocksData[0][0].getContents())) ||
-		       (gameModel.blocksData[2][0].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[0][2].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[2][1]) {
-		gameModel.blocksData[2][1].setContents("O");
-		gameModel.blocksData[2][1].setIsLegalMove(false);
-		// Enable the space on top of this one
-		gameModel.blocksData[1][1].setIsLegalMove(true);
-		gameModel.player = RowGamePlayer.PLAYER_1;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[2][1].getContents().equals(gameModel.blocksData[2][0].getContents()) &&
-			gameModel.blocksData[2][0].getContents().equals(gameModel.blocksData[2][2].getContents())) ||
-		       (gameModel.blocksData[2][1].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[0][1].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    } else if(block==gameView.gameBoardView.blocks[2][2]) {
-		gameModel.blocksData[2][2].setContents("O");
-		gameModel.blocksData[2][2].setIsLegalMove(false);
-		// Enable the space on top of this one
-		gameModel.blocksData[1][2].setIsLegalMove(true);
-		gameModel.player = RowGamePlayer.PLAYER_1;
-		if(movesLeft<7) {
-		    if((gameModel.blocksData[2][2].getContents().equals(gameModel.blocksData[2][1].getContents()) &&
-			gameModel.blocksData[2][1].getContents().equals(gameModel.blocksData[2][0].getContents())) ||
-		       (gameModel.blocksData[2][2].getContents().equals(gameModel.blocksData[1][2].getContents()) &&
-			gameModel.blocksData[1][2].getContents().equals(gameModel.blocksData[0][2].getContents())) ||
-		       (gameModel.blocksData[2][2].getContents().equals(gameModel.blocksData[1][1].getContents()) &&
-			gameModel.blocksData[1][1].getContents().equals(gameModel.blocksData[0][0].getContents()))) {
-			gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
-			endGame();
-		    } else if(movesLeft==0) {
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
-		    }
-		}
-	    }
-	}
-
+	AtomicInteger currentPosition = new AtomicInteger(-1);
+	List<JButton> flatbuttonsList = Arrays.stream(gameView.gameBoardView.blocks).flatMap(Arrays::stream).collect(Collectors.toList());
+	JButton currentButton = flatbuttonsList.stream()
+			.peek(x -> currentPosition.incrementAndGet())
+			.filter(block::equals)
+			.findFirst()
+			.get();
+	List<RowBlockModel> flatBlocks = Arrays.stream(gameModel.blocksData)
+			.flatMap(Arrays::stream)
+			.collect(Collectors.toList());
+	RowBlockModel currentBlock = flatBlocks.get(currentPosition.get());
+	currentBlock.setContents(player == RowGamePlayer.PLAYER_1 ? "X" : "0");
+	gameModel.player = togglePlayer(gameModel.player);
+	RowBlockModel aboveBlock = flatBlocks.get(currentPosition.get() - 3 >= 0 ? currentPosition.get() - 3: currentPosition.get());
+	aboveBlock.setIsLegalMove(true); // TODO: aboveBlock to be calculated for PLAYER_2 also ?
+	currentBlock.setIsLegalMove(false);
 	gameView.update(gameModel);
     }
 
@@ -415,6 +112,10 @@ public class RowGameController {
 
 	gameView.update(gameModel);
     }
+
+    public RowGamePlayer togglePlayer(RowGamePlayer player){
+    	return player == RowGamePlayer.PLAYER_1 ? RowGamePlayer.PLAYER_2 : RowGamePlayer.PLAYER_1 ;
+	}
 
 	static class RowGameMessage {
 		public static final String GAME_END_NOWINNER = "Game ends in a draw";
