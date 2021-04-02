@@ -158,8 +158,9 @@ public class RowGameController {
 					.map(row -> row[finalCurrentRow].getContents())
 					.filter(blockContent -> !blockContent.equals(""))
 					.collect(Collectors.toList());
-			if(filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == rows)
-				winnerString = filteredBlockContent.stream().distinct().findFirst().get();
+			if(filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == rows) {
+				return mapStringtoWinner(filteredBlockContent.stream().distinct().findFirst().get());
+			}
 		}
 		/*
 		* Rule #2 : if all rows are the same
@@ -189,11 +190,15 @@ public class RowGameController {
 				.filter(blockContent -> !blockContent.equals(""))
 				.collect(Collectors.toList());
 		if(diagonalElementsLeft.stream().distinct().count() == 1 && diagonalElementsLeft.size() == rows) winnerString = diagonalElementsLeft.stream().distinct().findFirst().get();
+		return mapStringtoWinner(winnerString);
+	}
+
+	RowGamePlayer mapStringtoWinner(String winnerString){
 		switch (winnerString){
 			case "X" : return RowGamePlayer.PLAYER_1;
 			case "0" : return RowGamePlayer.PLAYER_2;
 		}
-		return winner;
+		return null;
 	}
 
 }
