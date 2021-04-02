@@ -25,7 +25,7 @@ import view.RowGameGUI;
  * principles and needs a thorough overhaul to improve readability,
  * extensibility, and testability.
  */
-public class RowGameController {
+public abstract class RowGameController {
 
     public RowGameModel gameModel;
     public RowGameGUI gameView;
@@ -76,8 +76,8 @@ public class RowGameController {
 	RowBlockModel currentBlock = flatBlocks.get(currentPosition.get());
 	currentBlock.setContents(player == RowGamePlayer.PLAYER_1 ? "X" : "0");
 	gameModel.player = togglePlayer(gameModel.player);
-	RowBlockModel aboveBlock = flatBlocks.get(currentPosition.get() - 3 >= 0 ? currentPosition.get() - 3: currentPosition.get());
-	aboveBlock.setIsLegalMove(true); // TODO: aboveBlock to be calculated for PLAYER_2 also ?
+	List<RowBlockModel> legalBlocks = this.getLegalBlocks(currentPosition.get());
+	legalBlocks.forEach(legalblock -> legalblock.setIsLegalMove(true));
 	currentBlock.setIsLegalMove(false);
 	RowGamePlayer winner = this.isWin();
 	if(winner == null){
@@ -117,18 +117,7 @@ public class RowGameController {
     /**
      * Resets the game to be able to start playing again.
      */
-    public void resetGame() {
-        for(int row = 0;row<3;row++) {
-            for(int column = 0;column<3;column++) {
-                gameModel.blocksData[row][column].reset();
-		// Enable the bottom row
-	        gameModel.blocksData[row][column].setIsLegalMove(row == 2);
-            }
-        }gameModel.player = RowGamePlayer.PLAYER_1;
-	gameModel.movesLeft = 9;
-	gameModel.setFinalResult(null);
-	gameView.update(gameModel);
-    }
+    public abstract void resetGame();
 
     public RowGamePlayer togglePlayer(RowGamePlayer player){
     	return player == RowGamePlayer.PLAYER_1 ? RowGamePlayer.PLAYER_2 : RowGamePlayer.PLAYER_1 ;
@@ -192,6 +181,8 @@ public class RowGameController {
 		if(diagonalElementsLeft.stream().distinct().count() == 1 && diagonalElementsLeft.size() == rows) winnerString = diagonalElementsLeft.stream().distinct().findFirst().get();
 		return mapStringtoWinner(winnerString);
 	}
+
+	abstract List<RowBlockModel> getLegalBlocks(int currentPosition);
 
 	RowGamePlayer mapStringtoWinner(String winnerString){
 		switch (winnerString){
