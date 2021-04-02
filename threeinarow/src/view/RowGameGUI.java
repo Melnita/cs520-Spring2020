@@ -43,11 +43,7 @@ public class RowGameGUI implements RowGameView
         gui.add(options, BorderLayout.CENTER);
         gui.add(messages, BorderLayout.SOUTH);
 
-        reset.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                gameController.resetGame();
-            }
-        });
+        reset.addActionListener(e -> gameController.resetGame());
     }
 
     /**

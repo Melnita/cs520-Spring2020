@@ -80,6 +80,10 @@ public class RowGameController {
 	RowBlockModel aboveBlock = flatBlocks.get(currentPosition.get() - 3 >= 0 ? currentPosition.get() - 3: currentPosition.get());
 	aboveBlock.setIsLegalMove(true); // TODO: aboveBlock to be calculated for PLAYER_2 also ?
 	currentBlock.setIsLegalMove(false);
+	if(this.isWin()){
+		this.endGame();
+		gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
+	}
 	gameView.update(gameModel);
     }
 
@@ -109,7 +113,6 @@ public class RowGameController {
         }gameModel.player = RowGamePlayer.PLAYER_1;
 	gameModel.movesLeft = 9;
 	gameModel.setFinalResult(null);
-
 	gameView.update(gameModel);
     }
 
@@ -122,4 +125,19 @@ public class RowGameController {
 		public static final String PLAYER_1_WINS = "Player 1 wins!";
 		public static final String PLAYER_2_WINS = "Player 2 wins!";
 	}
+
+	public boolean isWin(){
+		System.out.println(Arrays.deepToString(gameModel.blocksData));
+		/*
+		* Rule #1 : if all columns are the same
+		* TODO : Remove 3x3 hardcoding, make generic for all columns
+		* */
+		List<String> filteredBlockContent = Arrays.stream(gameModel.blocksData)
+				.map(row -> row[0].getContents())
+				.filter(blockContent -> !blockContent.equals(""))
+				.collect(Collectors.toList());
+		return filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == 3;
+//    	return true;
+	}
+
 }
