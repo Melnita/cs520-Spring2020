@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import model.RowBlockModel;
 import model.RowGameModel;
@@ -126,18 +127,53 @@ public class RowGameController {
 		public static final String PLAYER_2_WINS = "Player 2 wins!";
 	}
 
+	/**
+	 * 
+	 * @return TODO : Make this return RowGamePlayer for winner & null if no one wins
+	 */
 	public boolean isWin(){
-		System.out.println(Arrays.deepToString(gameModel.blocksData));
+		boolean isWin = false;
 		/*
 		* Rule #1 : if all columns are the same
-		* TODO : Remove 3x3 hardcoding, make generic for all columns
+		* TODO : Remove 3x3 hardcoding
 		* */
-		List<String> filteredBlockContent = Arrays.stream(gameModel.blocksData)
-				.map(row -> row[0].getContents())
+		int rows = 3;
+		for(int currentRow = 0; currentRow < rows; currentRow++){
+			int finalCurrentRow = currentRow;
+			List<String> filteredBlockContent = Arrays.stream(gameModel.blocksData)
+					.map(row -> row[finalCurrentRow].getContents())
+					.filter(blockContent -> !blockContent.equals(""))
+					.collect(Collectors.toList());
+			isWin = filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == rows;
+			if(isWin) return isWin;
+		}
+		/*
+		* Rule #2 : if all rows are the same
+		* */
+		isWin = Arrays.stream(gameModel.blocksData)
+				.map(row -> {
+					List<String> filteredBlockContent = Arrays.stream(row)
+							.map(RowBlockModel::getContents)
+							.filter(blockContent -> !blockContent.equals(""))
+							.collect(Collectors.toList());
+					return filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == rows;
+				})
+				.reduce(false, (subtotal, element) -> subtotal || element);
+		/*
+		 * Rule #3 : if all diagonals are the same
+		 * */
+		List<String> diagonalElementsRight  = IntStream.range(0, rows)
+				.mapToObj(i -> gameModel.blocksData[i][i].getContents())
 				.filter(blockContent -> !blockContent.equals(""))
 				.collect(Collectors.toList());
-		return filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == 3;
-//    	return true;
+		isWin = diagonalElementsRight.stream().distinct().count() == 1 && diagonalElementsRight.size() == rows;
+		if(isWin) return isWin;
+		List<String> diagonalElementsLeft  = IntStream.range(0, rows)
+				.mapToObj(i -> gameModel.blocksData[i][rows - 1 - i].getContents())
+				.filter(blockContent -> !blockContent.equals(""))
+				.collect(Collectors.toList());
+		isWin = diagonalElementsLeft.stream().distinct().count() == 1 && diagonalElementsLeft.size() == rows;
+		return isWin;
 	}
 
 }
