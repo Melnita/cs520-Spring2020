@@ -6,10 +6,8 @@ import javax.swing.JTextArea;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -81,9 +79,24 @@ public class RowGameController {
 	RowBlockModel aboveBlock = flatBlocks.get(currentPosition.get() - 3 >= 0 ? currentPosition.get() - 3: currentPosition.get());
 	aboveBlock.setIsLegalMove(true); // TODO: aboveBlock to be calculated for PLAYER_2 also ?
 	currentBlock.setIsLegalMove(false);
-	if(this.isWin()){
-		this.endGame();
-		gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
+	RowGamePlayer winner = this.isWin();
+	if(winner == null){
+		/*
+		* TODO : track moves to check if no winner
+		* */
+		System.out.println("Null");
+	}
+	else {
+		switch (winner) {
+			case PLAYER_1:
+				gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
+				this.endGame();
+				break;
+			case PLAYER_2:
+				gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
+				this.endGame();
+				break;
+		}
 	}
 	gameView.update(gameModel);
     }
@@ -128,11 +141,12 @@ public class RowGameController {
 	}
 
 	/**
-	 * 
-	 * @return TODO : Make this return RowGamePlayer for winner & null if no one wins
+	 *
+	 * @return TODO : Winner of the game. Will return null if no winner as of current state
 	 */
-	public boolean isWin(){
-		boolean isWin = false;
+	public RowGamePlayer isWin(){
+		RowGamePlayer winner = null;
+		String winnerString = "";
 		/*
 		* Rule #1 : if all columns are the same
 		* TODO : Remove 3x3 hardcoding
@@ -144,21 +158,24 @@ public class RowGameController {
 					.map(row -> row[finalCurrentRow].getContents())
 					.filter(blockContent -> !blockContent.equals(""))
 					.collect(Collectors.toList());
-			isWin = filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == rows;
-			if(isWin) return isWin;
+			if(filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == rows)
+				winnerString = filteredBlockContent.stream().distinct().findFirst().get();
 		}
 		/*
 		* Rule #2 : if all rows are the same
 		* */
-		isWin = Arrays.stream(gameModel.blocksData)
+		winnerString = Arrays.stream(gameModel.blocksData)
 				.map(row -> {
 					List<String> filteredBlockContent = Arrays.stream(row)
 							.map(RowBlockModel::getContents)
 							.filter(blockContent -> !blockContent.equals(""))
 							.collect(Collectors.toList());
-					return filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == rows;
+					if(filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == rows) return filteredBlockContent.stream().distinct().findFirst().get();
+					return null;
 				})
-				.reduce(false, (subtotal, element) -> subtotal || element);
+				.filter(Objects::nonNull)
+				.findAny()
+				.orElse("");
 		/*
 		 * Rule #3 : if all diagonals are the same
 		 * */
@@ -166,14 +183,17 @@ public class RowGameController {
 				.mapToObj(i -> gameModel.blocksData[i][i].getContents())
 				.filter(blockContent -> !blockContent.equals(""))
 				.collect(Collectors.toList());
-		isWin = diagonalElementsRight.stream().distinct().count() == 1 && diagonalElementsRight.size() == rows;
-		if(isWin) return isWin;
+		if(diagonalElementsRight.stream().distinct().count() == 1 && diagonalElementsRight.size() == rows) winnerString = diagonalElementsRight.stream().distinct().findFirst().get();
 		List<String> diagonalElementsLeft  = IntStream.range(0, rows)
 				.mapToObj(i -> gameModel.blocksData[i][rows - 1 - i].getContents())
 				.filter(blockContent -> !blockContent.equals(""))
 				.collect(Collectors.toList());
-		isWin = diagonalElementsLeft.stream().distinct().count() == 1 && diagonalElementsLeft.size() == rows;
-		return isWin;
+		if(diagonalElementsLeft.stream().distinct().count() == 1 && diagonalElementsLeft.size() == rows) winnerString = diagonalElementsLeft.stream().distinct().findFirst().get();
+		switch (winnerString){
+			case "X" : return RowGamePlayer.PLAYER_1;
+			case "0" : return RowGamePlayer.PLAYER_2;
+		}
+		return winner;
 	}
 
 }
