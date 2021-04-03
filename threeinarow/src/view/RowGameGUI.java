@@ -30,13 +30,13 @@ public class RowGameGUI implements RowGameView
         gui.setResizable(true);
         gui.setTitle(gameController.getGameName());
 	gameBoardView = new RowGameBoardView(this.gameController);
-        JPanel gamePanel = gameBoardView.gamePanel;
+        JPanel gamePanel = gameBoardView.getGamePanel();
 
         JPanel options = new JPanel(new FlowLayout());
         options.add(reset);
 
 	gameStatusView = new RowGameStatusView(this.gameController);
-        JPanel messages = gameStatusView.messages;
+        JPanel messages = gameStatusView.getMessages();
 
         gui.add(gamePanel, BorderLayout.NORTH);
         gui.add(options, BorderLayout.CENTER);

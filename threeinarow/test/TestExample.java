@@ -227,10 +227,10 @@ public class TestExample {
     @Test
     public void verifyGameGUI(){
         threeInARowGame.move(2,0);
-        assertEquals("Player 2 to play 'O'", ((JTextArea) threeInARowGameGUI.gameStatusView.messages.getComponent(0)).getText());
+        assertEquals("Player 2 to play 'O'", ((JTextArea) threeInARowGameGUI.gameStatusView.getMessages().getComponent(0)).getText());
         ticTacToeGame.move(0,0);
         ticTacToeGame.move(0,1);
-        assertEquals("Player 1 to play 'X'", ((JTextArea) ticTacToeGameGUI.gameStatusView.messages.getComponent(0)).getText());
+        assertEquals("Player 1 to play 'X'", ((JTextArea) ticTacToeGameGUI.gameStatusView.getMessages().getComponent(0)).getText());
     }
 
     private List<JButton> getJButtonsfromMoves(JButton[][] blocks, int[][] moves){
