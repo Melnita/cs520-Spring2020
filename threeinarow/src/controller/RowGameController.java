@@ -48,14 +48,12 @@ public abstract class RowGameController {
     /**
      * Moves the current player into the given block.
      *
-     * @param block The block to be moved to by the current player
+     * @param row row position which was clicked
+	 * @param column col position which was clicked
      */
-    public void move(JButton block) {
+    public void move(int row, int column) {
 	RowGamePlayer player = gameModel.player;
 	this.gameModel.moveCompleted();
-	List<Integer> currentPositionString = parsePositionString(block.getActionCommand());
-	int row = currentPositionString.get(0);
-	int column = currentPositionString.get(1);
 	System.out.println("ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[" + row + "][" + column + "]);");
 	RowBlockModel currentBlock = this.gameModel.blocksData[row][column];
 	if(!currentBlock.getIsLegalMove())

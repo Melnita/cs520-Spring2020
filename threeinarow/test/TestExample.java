@@ -54,15 +54,15 @@ public class TestExample {
 
     @Test(expected = IllegalArgumentException.class)
     public void verifyThreeInARowIllegalMove(){
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[0][0]); // top left block is illegal
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[4][4]); // outside dimensions of the game
+        threeInARowGame.move(0,0); // top left block is illegal
+        threeInARowGame.move(4,4); // outside dimensions of the game
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void verifyTicTacToeIllegalMove(){
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][0]); // legal move
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][0]); // illegal move
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[4][4]); // outside dimensions of the game
+        ticTacToeGame.move(0,0); // legal move
+        ticTacToeGame.move(0,0); // illegal move
+        ticTacToeGame.move(4,4); // outside dimensions of the game
     }
 
     /**
@@ -74,8 +74,8 @@ public class TestExample {
      */
     @Test
     public void verifyThreeInARowLegalMove(){
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][0]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][1]);
+        threeInARowGame.move(2,0);
+        threeInARowGame.move(2,1);
         assertTrue(threeInARowGameModel.getBlock(1, 0).getIsLegalMove());
         assertTrue(threeInARowGameModel.getBlock(1, 1).getIsLegalMove());
         assertTrue(threeInARowGameModel.getBlock(2, 2).getIsLegalMove());
@@ -96,9 +96,9 @@ public class TestExample {
      */
     @Test
     public void verifyTicTacToeMove(){
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][0]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][1]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][2]);
+        ticTacToeGame.move(2,0);
+        ticTacToeGame.move(2,1);
+        ticTacToeGame.move(2,2);
         assertTrue(ticTacToeGameModel.getBlock(0, 0).getIsLegalMove());
         assertTrue(ticTacToeGameModel.getBlock(0, 1).getIsLegalMove());
         assertTrue(ticTacToeGameModel.getBlock(0, 2).getIsLegalMove());
@@ -117,13 +117,13 @@ public class TestExample {
         * [X] [X] [0]
         * [X] [0] [0]
         * */
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][0]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][1]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[1][1]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][2]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[1][0]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[1][2]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[0][2]);
+        threeInARowGame.move(2,0);
+        threeInARowGame.move(2,1);
+        threeInARowGame.move(1,1);
+        threeInARowGame.move(2,2);
+        threeInARowGame.move(1,0);
+        threeInARowGame.move(1,2);
+        threeInARowGame.move(0,2);
         assertEquals(threeInARowGame.isWin(), RowGamePlayer.PLAYER_1); // winner should be player 1
     }
 
@@ -134,12 +134,12 @@ public class TestExample {
         * [X] [X] [ ]
         * [0] [0] [0]
         * */
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[1][1]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][1]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[1][0]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][2]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][1]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][0]);
+        ticTacToeGame.move(1,1);
+        ticTacToeGame.move(2,1);
+        ticTacToeGame.move(1,0);
+        ticTacToeGame.move(2,2);
+        ticTacToeGame.move(0,1);
+        ticTacToeGame.move(2,0);
         assertEquals(ticTacToeGame.isWin(), RowGamePlayer.PLAYER_2); // winner should be player 2
     }
 
@@ -150,15 +150,15 @@ public class TestExample {
         * [0] [0] [X]
         * [X] [0] [X]
         * */
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][2]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[1][0]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[1][2]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][1]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][0]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[1][1]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][1]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][2]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][0]);
+        ticTacToeGame.move(2,2);
+        ticTacToeGame.move(1,0);
+        ticTacToeGame.move(1,2);
+        ticTacToeGame.move(2,1);
+        ticTacToeGame.move(2,0);
+        ticTacToeGame.move(1,1);
+        ticTacToeGame.move(0,1);
+        ticTacToeGame.move(0,2);
+        ticTacToeGame.move(0,0);
         assertTrue(ticTacToeGame.isWin() == null && ticTacToeGameModel.movesLeft == 0); // null if Tie
     }
 
@@ -169,28 +169,28 @@ public class TestExample {
         * [O] [O] [X]
         * [X] [X] [O]
         * */
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][1]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[1][1]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[0][1]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][2]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][0]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[1][0]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[1][2]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[0][2]);
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[0][0]);
+        threeInARowGame.move(2,1);
+        threeInARowGame.move(1,1);
+        threeInARowGame.move(0,1);
+        threeInARowGame.move(2,2);
+        threeInARowGame.move(2,0);
+        threeInARowGame.move(1,0);
+        threeInARowGame.move(1,2);
+        threeInARowGame.move(0,2);
+        threeInARowGame.move(0,0);
         assertTrue(threeInARowGame.isWin() == null && threeInARowGameModel.movesLeft == 0); // null if Tie
     }
 
     @Test
     public void verifyResetThreeInARow(){
-        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][0]);
+        threeInARowGame.move(2,0);
         threeInARowGame.resetGame();
         assertTrue(threeInARowGameModel.getBlock(2, 0).getIsLegalMove());
     }
 
     @Test
     public void verifyResetTicTacToe(){
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][0]);
+        ticTacToeGame.move(0,0);
         ticTacToeGame.resetGame();
         assertTrue(ticTacToeGameModel.getBlock(0, 0).getIsLegalMove());
     }
@@ -226,10 +226,10 @@ public class TestExample {
 
     @Test
     public void verifyGameGUI(){
-        threeInARowGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][0]);
+        threeInARowGame.move(2,0);
         assertEquals("Player 2 to play 'O'", ((JTextArea) threeInARowGameGUI.gameStatusView.messages.getComponent(0)).getText());
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][0]);
-        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][1]);
+        ticTacToeGame.move(0,0);
+        ticTacToeGame.move(0,1);
         assertEquals("Player 1 to play 'X'", ((JTextArea) ticTacToeGameGUI.gameStatusView.messages.getComponent(0)).getText());
     }
 
