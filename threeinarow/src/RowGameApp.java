@@ -1,6 +1,7 @@
 import controller.RowGameController;
 import controller.ThreeInARowController;
 import controller.TicTacToeController;
+import view.RowGameGUI;
 
 
 public class RowGameApp 
@@ -11,6 +12,7 @@ public class RowGameApp
     public static void main(String[] args) {
 	RowGameController game = new ThreeInARowController();
 //	RowGameController game = new TicTacToeController();
-	game.startUp();
+	RowGameGUI gui = new RowGameGUI(game);
+	game.resetGame();
     }
 }

@@ -44,6 +44,7 @@ public class RowGameGUI implements RowGameView
         gui.add(messages, BorderLayout.SOUTH);
 
         reset.addActionListener(e -> gameController.resetGame());
+        gui.setVisible(true);
     }
 
     /**

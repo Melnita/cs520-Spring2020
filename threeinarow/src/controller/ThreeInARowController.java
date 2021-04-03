@@ -19,7 +19,7 @@ public class ThreeInARowController extends RowGameController {
         gameModel.player = RowGamePlayer.PLAYER_1;
         gameModel.movesLeft = 9;
         gameModel.setFinalResult(null);
-        gameView.update(gameModel);
+//        gameView.update(gameModel);
     }
 
     /**

@@ -28,7 +28,6 @@ import view.RowGameGUI;
 public abstract class RowGameController {
 
     public RowGameModel gameModel;
-    public RowGameGUI gameView;
 
 
     /**
@@ -36,7 +35,6 @@ public abstract class RowGameController {
      */
     public RowGameController() {
 	gameModel = new RowGameModel();
-	gameView = new RowGameGUI(this);
 	
 	resetGame();
     }
@@ -45,60 +43,43 @@ public abstract class RowGameController {
 	return this.gameModel;
     }
 
-    public RowGameGUI getView() {
-	return this.gameView;
-    }
-
-    public void startUp() {
-	gameView.makeVisible();
-    }
-
     /**
      * Moves the current player into the given block.
      *
      * @param block The block to be moved to by the current player
      */
     public void move(JButton block) {
-	gameModel.movesLeft = gameModel.movesLeft - 1;
-
 	RowGamePlayer player = gameModel.player;
-	int movesLeft = gameModel.movesLeft;
-	AtomicInteger currentPosition = new AtomicInteger(-1);
-	List<JButton> flatbuttonsList = Arrays.stream(gameView.gameBoardView.blocks).flatMap(Arrays::stream).collect(Collectors.toList());
-	JButton currentButton = flatbuttonsList.stream()
-			.peek(x -> currentPosition.incrementAndGet())
-			.filter(block::equals)
-			.findFirst()
-			.get();
-	List<RowBlockModel> flatBlocks = Arrays.stream(gameModel.blocksData)
-			.flatMap(Arrays::stream)
-			.collect(Collectors.toList());
-	RowBlockModel currentBlock = flatBlocks.get(currentPosition.get());
+	this.gameModel.moveCompleted();
+	String[] currentPositionString = block.getActionCommand().split(":");
+	int row = Integer.parseInt(currentPositionString[0]);
+	int column = Integer.parseInt(currentPositionString[1]);
+	RowBlockModel currentBlock = this.gameModel.blocksData[row][column];
 	currentBlock.setContents(player == RowGamePlayer.PLAYER_1 ? "X" : "0");
 	gameModel.player = togglePlayer(gameModel.player);
-	List<RowBlockModel> legalBlocks = this.getLegalBlocks(currentPosition.get());
+	List<RowBlockModel> legalBlocks = this.getLegalBlocks(row * 3 + column);
 	legalBlocks.forEach(legalblock -> legalblock.setIsLegalMove(true));
 	currentBlock.setIsLegalMove(false);
 	RowGamePlayer winner = this.isWin();
+	gameModel.setFinalResult(null);
 	if(winner == null){
-		/*
-		* TODO : track moves to check if no winner
-		* */
-		System.out.println("Null");
+		if(gameModel.movesLeft == 0){
+			this.endGame();
+			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
+		}
 	}
 	else {
 		switch (winner) {
 			case PLAYER_1:
-				gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
 				this.endGame();
+				gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
 				break;
 			case PLAYER_2:
-				gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
 				this.endGame();
+				gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
 				break;
 		}
 	}
-	gameView.update(gameModel);
     }
 
     /**
@@ -110,8 +91,7 @@ public abstract class RowGameController {
 		this.gameModel.blocksData[row][column].setIsLegalMove(false);
 	    }
 	}
-
-	gameView.update(gameModel);
+//	gameView.update(gameModel);
     }
 
     /**

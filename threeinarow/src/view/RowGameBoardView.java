@@ -33,13 +33,11 @@ public class RowGameBoardView implements RowGameView
                 blocks[row][column] = new JButton();
                 blocks[row][column].setPreferredSize(new Dimension(75,75));
                 game.add(blocks[row][column]);
-                blocks[row][column].addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-			gameController.move((JButton)e.getSource());
-                    }
-                });
+                blocks[row][column].addActionListener(e -> gameController.move((JButton)e.getSource()));
+                blocks[row][column].setActionCommand(row + ":" + column);
             }
-        }	
+        }
+        gameController.getModel().addPropertyChangeListener(e -> update(gameController.getModel()));
     }
 
     /**

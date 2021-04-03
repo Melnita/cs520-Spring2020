@@ -22,6 +22,7 @@ public class RowGameStatusView implements RowGameView
 
 	messages.setBackground(Color.white);
 	messages.add(playerturn);
+	gameController.getModel().addPropertyChangeListener(e -> update(gameController.getModel()));
     }
 
     public void update(RowGameModel gameModel) {
