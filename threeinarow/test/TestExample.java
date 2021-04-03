@@ -1,6 +1,7 @@
 import controller.RowGameController;
 import controller.ThreeInARowController;
 import controller.TicTacToeController;
+import model.RowGamePlayer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -106,6 +107,77 @@ public class TestExample {
         assertFalse(ticTacToeGameModel.getBlock(2, 0).getIsLegalMove());
         assertFalse(ticTacToeGameModel.getBlock(2, 1).getIsLegalMove());
         assertFalse(ticTacToeGameModel.getBlock(2, 2).getIsLegalMove());
+    }
+
+    @Test
+    public void verifyThreeInARowPlayerWin(){
+        /*
+        * [ ] [ ] [X]
+        * [X] [X] [0]
+        * [X] [0] [0]
+        * */
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][0]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][1]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[1][1]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][2]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[1][0]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[1][2]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[0][2]);
+        assertEquals(threeInARowGame.isWin(), RowGamePlayer.PLAYER_1); // winner should be player 1
+    }
+
+    @Test
+    public void verifyTicTacToePlayerWin(){
+        /*
+        * [ ] [X] [ ]
+        * [X] [X] [ ]
+        * [0] [0] [0]
+        * */
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[1][1]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][1]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[1][0]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][2]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][1]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][0]);
+        assertEquals(ticTacToeGame.isWin(), RowGamePlayer.PLAYER_2); // winner should be player 2
+    }
+
+    @Test
+    public void verifyTicTacToeTie(){
+        /*
+        * [X] [X] [0]
+        * [0] [0] [X]
+        * [X] [0] [X]
+        * */
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][2]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[1][0]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[1][2]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][1]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][0]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[1][1]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][1]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][2]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][0]);
+        assertTrue(ticTacToeGame.isWin() == null && ticTacToeGameModel.movesLeft == 0); // null if Tie
+    }
+
+    @Test
+    public void verifyThreeInARowTie(){
+        /*
+        * [X] [X] [O]
+        * [O] [O] [X]
+        * [X] [X] [O]
+        * */
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][1]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[1][1]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[0][1]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][2]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][0]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[1][0]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[1][2]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[0][2]);
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[0][0]);
+        assertTrue(threeInARowGame.isWin() == null && threeInARowGameModel.movesLeft == 0); // null if Tie
     }
 
     private List<JButton> getJButtonsfromMoves(JButton[][] blocks, int[][] moves){
