@@ -9,7 +9,7 @@ public class RowGameModel
     public static final String GAME_END_NOWINNER = "Game ends in a draw";
     private int rows;
     private int cols;
-    public RowBlockModel[][] blocksData;
+    private RowBlockModel[][] blocksData;
 
     /**
      * The current player taking their turn
@@ -26,10 +26,10 @@ public class RowGameModel
         super();
         this.setRows(rows);
         this.cols = cols;
-        blocksData = new RowBlockModel[rows][cols];
+        setBlocksData(new RowBlockModel[rows][cols]);
 	for (int row = 0; row < rows; row++) {
 	    for (int col = 0; col < cols; col++) {
-		blocksData[row][col] = new RowBlockModel(this);
+		getBlocksData()[row][col] = new RowBlockModel(this);
 	    } // end for col
 	} // end for row
         support = new PropertyChangeSupport(this);
@@ -53,7 +53,7 @@ public class RowGameModel
     }
 
     public RowBlockModel getBlock(int row, int col){
-        return this.blocksData[row][col];
+        return this.getBlocksData()[row][col];
     }
 
     public int getRows() {
@@ -70,5 +70,13 @@ public class RowGameModel
 
     public void setCols(int cols) {
         this.cols = cols;
+    }
+
+    public RowBlockModel[][] getBlocksData() {
+        return blocksData;
+    }
+
+    public void setBlocksData(RowBlockModel[][] blocksData) {
+        this.blocksData = blocksData;
     }
 }

@@ -47,7 +47,7 @@ public abstract class RowGameController {
 	RowGamePlayer player = gameModel.player;
 	this.gameModel.moveCompleted();
 	System.out.println("ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[" + row + "][" + column + "]);");
-	RowBlockModel currentBlock = this.gameModel.blocksData[row][column];
+	RowBlockModel currentBlock = this.gameModel.getBlocksData()[row][column];
 	if(!currentBlock.getIsLegalMove())
 		throw new IllegalArgumentException("Not a legal move");
 	if(row >= gameModel.getRows() || column >= gameModel.getCols())
@@ -85,7 +85,7 @@ public abstract class RowGameController {
     public void endGame() {
 	for(int row = 0; row< gameModel.getRows(); row++) {
 	    for(int column = 0;column< gameModel.getCols();column++) {
-		this.gameModel.blocksData[row][column].setIsLegalMove(false);
+		this.gameModel.getBlocksData()[row][column].setIsLegalMove(false);
 	    }
 	}
 //	gameView.update(gameModel);
@@ -119,7 +119,7 @@ public abstract class RowGameController {
 		* */
 		for(int currentRow = 0; currentRow < cols; currentRow++){
 			int finalCurrentRow = currentRow;
-			List<String> filteredBlockContent = Arrays.stream(gameModel.blocksData)
+			List<String> filteredBlockContent = Arrays.stream(gameModel.getBlocksData())
 					.map(row -> row[finalCurrentRow].getContents())
 					.filter(blockContent -> !blockContent.equals(""))
 					.collect(Collectors.toList());
@@ -130,7 +130,7 @@ public abstract class RowGameController {
 		/*
 		* Rule #2 : if all rows are the same
 		* */
-		winnerString = Arrays.stream(gameModel.blocksData)
+		winnerString = Arrays.stream(gameModel.getBlocksData())
 				.map(row -> {
 					List<String> filteredBlockContent = Arrays.stream(row)
 							.map(RowBlockModel::getContents)
@@ -147,13 +147,13 @@ public abstract class RowGameController {
 		 * */
 		if(rows == cols) {
 			List<String> diagonalElementsRight = IntStream.range(0, rows)
-					.mapToObj(i -> gameModel.blocksData[i][i].getContents())
+					.mapToObj(i -> gameModel.getBlocksData()[i][i].getContents())
 					.filter(blockContent -> !blockContent.equals(""))
 					.collect(Collectors.toList());
 			if (diagonalElementsRight.stream().distinct().count() == 1 && diagonalElementsRight.size() == rows)
 				winnerString = diagonalElementsRight.stream().distinct().findFirst().get();
 			List<String> diagonalElementsLeft = IntStream.range(0, rows)
-					.mapToObj(i -> gameModel.blocksData[i][rows - 1 - i].getContents())
+					.mapToObj(i -> gameModel.getBlocksData()[i][rows - 1 - i].getContents())
 					.filter(blockContent -> !blockContent.equals(""))
 					.collect(Collectors.toList());
 			if (diagonalElementsLeft.stream().distinct().count() == 1 && diagonalElementsLeft.size() == rows)

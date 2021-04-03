@@ -21,10 +21,10 @@ public class ThreeInARowController extends RowGameController {
 
     @Override
     public void resetGame() {
-        Arrays.stream(gameModel.blocksData)
+        Arrays.stream(gameModel.getBlocksData())
                 .flatMap(Arrays::stream)
                 .forEach(RowBlockModel::reset);
-        Arrays.stream(gameModel.blocksData[gameModel.blocksData.length - 1])
+        Arrays.stream(gameModel.getBlocksData()[gameModel.getBlocksData().length - 1])
                 .forEach(block -> block.setIsLegalMove(true));
         gameModel.player = RowGamePlayer.PLAYER_1;
         gameModel.movesLeft = rows * cols;
@@ -39,7 +39,7 @@ public class ThreeInARowController extends RowGameController {
      */
     @Override
     List<RowBlockModel> getLegalBlocks(int currentPosition) {
-        List<RowBlockModel> flatBlocks = Arrays.stream(this.gameModel.blocksData)
+        List<RowBlockModel> flatBlocks = Arrays.stream(this.gameModel.getBlocksData())
                 .flatMap(Arrays::stream)
                 .collect(Collectors.toList());
         return Collections.singletonList(flatBlocks.get(currentPosition - gameModel.getRows() >= 0 ? currentPosition - gameModel.getRows() : currentPosition));

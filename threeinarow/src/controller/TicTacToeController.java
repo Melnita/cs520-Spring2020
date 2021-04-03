@@ -3,7 +3,6 @@ package controller;
 import model.RowBlockModel;
 import model.RowGamePlayer;
 
-import javax.swing.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +21,7 @@ public class TicTacToeController extends RowGameController{
 
     @Override
     public void resetGame() {
-        Arrays.stream(gameModel.blocksData)
+        Arrays.stream(gameModel.getBlocksData())
                 .flatMap(Arrays::stream)
                 .forEach(block -> {
                     block.reset();
@@ -36,7 +35,7 @@ public class TicTacToeController extends RowGameController{
 
     @Override
     List<RowBlockModel> getLegalBlocks(int currentPosition) {
-        return Arrays.stream(this.gameModel.blocksData)
+        return Arrays.stream(this.gameModel.getBlocksData())
                 .flatMap(Arrays::stream)
                 .filter(block -> block.getContents().equals(""))
                 .collect(Collectors.toList());

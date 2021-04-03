@@ -205,7 +205,7 @@ public class TestExample {
 
     @Test
     public void verifyTicTacToeInitialBlocks(){
-        assertTrue(Arrays.stream(ticTacToeGameModel.blocksData)
+        assertTrue(Arrays.stream(ticTacToeGameModel.getBlocksData())
                 .flatMap(Arrays::stream)
                 .map(RowBlockModel::getIsLegalMove)
                 .reduce(true, (subtotal, element) -> subtotal && element));
@@ -213,11 +213,11 @@ public class TestExample {
 
     @Test
     public void verifyThreeInARowInitialBlocks(){
-        assertTrue(Arrays.stream(threeInARowGameModel.blocksData[2])
+        assertTrue(Arrays.stream(threeInARowGameModel.getBlocksData()[2])
                 .map(RowBlockModel::getIsLegalMove)
                 .reduce(true, (subtotal, element) -> subtotal && element));
         IntStream.range(0, 2).forEach(i -> {
-            assertFalse(Arrays.stream(threeInARowGameModel.blocksData[i])
+            assertFalse(Arrays.stream(threeInARowGameModel.getBlocksData()[i])
                     .peek(System.out::println)
                     .map(RowBlockModel::getIsLegalMove)
                     .reduce(Boolean::logicalAnd).get());
