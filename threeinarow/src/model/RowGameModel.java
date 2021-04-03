@@ -49,4 +49,8 @@ public class RowGameModel
         this.movesLeft--;
     }
 
+    public RowBlockModel getBlock(int row, int col){
+        return this.blocksData[row][col];
+    }
+
 }

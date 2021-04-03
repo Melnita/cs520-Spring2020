@@ -50,11 +50,16 @@ public abstract class RowGameController {
      */
     public void move(JButton block) {
 	RowGamePlayer player = gameModel.player;
+	System.out.println(block);
 	this.gameModel.moveCompleted();
-	String[] currentPositionString = block.getActionCommand().split(":");
-	int row = Integer.parseInt(currentPositionString[0]);
-	int column = Integer.parseInt(currentPositionString[1]);
+	List<Integer> currentPositionString = parsePositionString(block.getActionCommand());
+	int row = currentPositionString.get(0);
+	int column = currentPositionString.get(1);
 	RowBlockModel currentBlock = this.gameModel.blocksData[row][column];
+	if(!currentBlock.getIsLegalMove())
+		throw new IllegalArgumentException("Not a legal move");
+	if(row >= 3 || column >= 3)
+		throw new IllegalArgumentException("Outside board dimensions");
 	currentBlock.setContents(player == RowGamePlayer.PLAYER_1 ? "X" : "0");
 	gameModel.player = togglePlayer(gameModel.player);
 	List<RowBlockModel> legalBlocks = this.getLegalBlocks(row * 3 + column);
@@ -170,6 +175,13 @@ public abstract class RowGameController {
 			case "0" : return RowGamePlayer.PLAYER_2;
 		}
 		return null;
+	}
+
+	public static List<Integer> parsePositionString(String positionString){
+		return Arrays.stream(positionString.split(":"))
+				.mapToInt(Integer::parseInt)
+				.boxed()
+				.collect(Collectors.toList());
 	}
 
 }
