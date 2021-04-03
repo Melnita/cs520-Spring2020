@@ -1,21 +1,13 @@
 package controller;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
-import javax.swing.JPanel;
-import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import model.RowBlockModel;
 import model.RowGameModel;
 import model.RowGamePlayer;
-import view.RowGameGUI;
 
 
 /**
@@ -58,11 +50,11 @@ public abstract class RowGameController {
 	RowBlockModel currentBlock = this.gameModel.blocksData[row][column];
 	if(!currentBlock.getIsLegalMove())
 		throw new IllegalArgumentException("Not a legal move");
-	if(row >= gameModel.rows || column >= gameModel.cols)
+	if(row >= gameModel.getRows() || column >= gameModel.getCols())
 		throw new IllegalArgumentException("Outside board dimensions");
 	currentBlock.setContents(player == RowGamePlayer.PLAYER_1 ? "X" : "0");
 	gameModel.player = togglePlayer(gameModel.player);
-	List<RowBlockModel> legalBlocks = this.getLegalBlocks(row * gameModel.cols + column);
+	List<RowBlockModel> legalBlocks = this.getLegalBlocks(row * gameModel.getCols() + column);
 	legalBlocks.forEach(legalblock -> legalblock.setIsLegalMove(true));
 	currentBlock.setIsLegalMove(false);
 	RowGamePlayer winner = this.isWin();
@@ -91,8 +83,8 @@ public abstract class RowGameController {
      * Ends the game disallowing further player turns.
      */
     public void endGame() {
-	for(int row = 0;row< gameModel.rows;row++) {
-	    for(int column = 0;column< gameModel.cols;column++) {
+	for(int row = 0; row< gameModel.getRows(); row++) {
+	    for(int column = 0;column< gameModel.getCols();column++) {
 		this.gameModel.blocksData[row][column].setIsLegalMove(false);
 	    }
 	}

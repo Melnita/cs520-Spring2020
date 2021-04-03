@@ -7,8 +7,8 @@ import java.beans.PropertyChangeSupport;
 public class RowGameModel
 {
     public static final String GAME_END_NOWINNER = "Game ends in a draw";
-    public int rows;
-    public int cols;
+    private int rows;
+    private int cols;
     public RowBlockModel[][] blocksData;
 
     /**
@@ -24,7 +24,7 @@ public class RowGameModel
 
     public RowGameModel(int rows, int cols) {
         super();
-        this.rows = rows;
+        this.setRows(rows);
         this.cols = cols;
         blocksData = new RowBlockModel[rows][cols];
 	for (int row = 0; row < rows; row++) {
@@ -56,4 +56,19 @@ public class RowGameModel
         return this.blocksData[row][col];
     }
 
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    public int getCols() {
+        return cols;
+    }
+
+    public void setCols(int cols) {
+        this.cols = cols;
+    }
 }

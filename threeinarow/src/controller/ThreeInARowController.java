@@ -42,7 +42,7 @@ public class ThreeInARowController extends RowGameController {
         List<RowBlockModel> flatBlocks = Arrays.stream(this.gameModel.blocksData)
                 .flatMap(Arrays::stream)
                 .collect(Collectors.toList());
-        return Collections.singletonList(flatBlocks.get(currentPosition - gameModel.rows >= 0 ? currentPosition - gameModel.rows : currentPosition));
+        return Collections.singletonList(flatBlocks.get(currentPosition - gameModel.getRows() >= 0 ? currentPosition - gameModel.getRows() : currentPosition));
     }
 
     @Override

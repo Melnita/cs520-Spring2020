@@ -1,12 +1,9 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -52,8 +49,8 @@ public class RowGameBoardView implements RowGameView
      * @param gameModel The current game model
      */
     public void update(RowGameModel gameModel) {
-	for (int row = 0; row < gameModel.rows; row++) {
-	    for (int column = 0; column < gameModel.cols; column++) {
+	for (int row = 0; row < gameModel.getRows(); row++) {
+	    for (int column = 0; column < gameModel.getCols(); column++) {
 		this.updateBlock(gameModel, row, column);
 	    } // end for col
 	} // end for row	

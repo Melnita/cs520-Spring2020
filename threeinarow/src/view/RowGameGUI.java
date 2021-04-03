@@ -4,7 +4,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.*;
-import java.awt.event.*;
 
 import model.RowGameModel;
 import controller.RowGameController;
@@ -27,7 +26,7 @@ public class RowGameGUI implements RowGameView
 	this.gameController = gameController;
 	
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gui.setSize(new Dimension(350/3 * gameController.gameModel.rows, 300/3 * gameController.gameModel.cols));
+        gui.setSize(new Dimension(350/3 * gameController.gameModel.getRows(), 300/3 * gameController.gameModel.getCols()));
         gui.setResizable(true);
         gui.setTitle(gameController.getGameName());
 	gameBoardView = new RowGameBoardView(this.gameController);
