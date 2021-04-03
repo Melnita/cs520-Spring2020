@@ -7,8 +7,9 @@ import java.beans.PropertyChangeSupport;
 public class RowGameModel
 {
     public static final String GAME_END_NOWINNER = "Game ends in a draw";
-
-    public RowBlockModel[][] blocksData = new RowBlockModel[3][3];
+    public int rows;
+    public int cols;
+    public RowBlockModel[][] blocksData;
 
     /**
      * The current player taking their turn
@@ -21,11 +22,13 @@ public class RowGameModel
     private final PropertyChangeSupport support;
 
 
-    public RowGameModel() {
-	super();
-
-	for (int row = 0; row < 3; row++) {
-	    for (int col = 0; col < 3; col++) {
+    public RowGameModel(int rows, int cols) {
+        super();
+        this.rows = rows;
+        this.cols = cols;
+        blocksData = new RowBlockModel[rows][cols];
+	for (int row = 0; row < rows; row++) {
+	    for (int col = 0; col < cols; col++) {
 		blocksData[row][col] = new RowBlockModel(this);
 	    } // end for col
 	} // end for row

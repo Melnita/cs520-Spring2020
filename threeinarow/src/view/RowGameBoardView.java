@@ -17,19 +17,21 @@ import model.RowGameModel;
 
 public class RowGameBoardView implements RowGameView
 {
-    public JButton[][] blocks = new JButton[3][3];
+    public JButton[][] blocks;
     public JPanel gamePanel = new JPanel(new FlowLayout());
 
     
     public RowGameBoardView(RowGameController gameController) {
 	super();
 
-        JPanel game = new JPanel(new GridLayout(3,3));
+        JPanel game = new JPanel(new GridLayout(gameController.rows, gameController.cols));
         gamePanel.add(game, BorderLayout.CENTER);
-	
+        int rows = gameController.rows;
+        int cols = gameController.cols;
+        blocks = new JButton[rows][cols];
        // Initialize a JButton for each cell of the 3x3 game board.
-        for(int row = 0; row<3; row++) {
-            for(int column = 0; column<3 ;column++) {
+        for(int row = 0; row<rows; row++) {
+            for(int column = 0; column<cols ;column++) {
                 blocks[row][column] = new JButton();
                 blocks[row][column].setPreferredSize(new Dimension(75,75));
                 game.add(blocks[row][column]);
@@ -47,8 +49,8 @@ public class RowGameBoardView implements RowGameView
      * @param gameModel The current game model
      */
     public void update(RowGameModel gameModel) {
-	for (int row = 0; row < 3; row++) {
-	    for (int column = 0; column < 3; column++) {
+	for (int row = 0; row < gameModel.rows; row++) {
+	    for (int column = 0; column < gameModel.cols; column++) {
 		this.updateBlock(gameModel, row, column);
 	    } // end for col
 	} // end for row	
@@ -60,7 +62,7 @@ public class RowGameBoardView implements RowGameView
      *
      * @param gameModel The game model
      * @param row The row that contains the block
-     * @param column The column that contains the block
+     * @param col The column that contains the block
      */
     protected void updateBlock(RowGameModel gameModel, int row, int col) {
 	blocks[row][col].setText(gameModel.blocksData[row][col].getContents());

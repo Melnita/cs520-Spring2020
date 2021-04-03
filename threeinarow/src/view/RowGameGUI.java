@@ -27,7 +27,7 @@ public class RowGameGUI implements RowGameView
 	this.gameController = gameController;
 	
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gui.setSize(new Dimension(500, 350));
+        gui.setSize(new Dimension(350/3 * gameController.gameModel.rows, 300/3 * gameController.gameModel.cols));
         gui.setResizable(true);
 
 	gameBoardView = new RowGameBoardView(this.gameController);

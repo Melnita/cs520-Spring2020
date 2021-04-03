@@ -9,6 +9,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ThreeInARowController extends RowGameController {
+    /**
+     * Creates a new game initializing the GUI.
+     *
+     * @param rows
+     * @param cols
+     */
+    public ThreeInARowController(int rows, int cols) {
+        super(rows, cols);
+    }
+
     @Override
     public void resetGame() {
         Arrays.stream(gameModel.blocksData)
@@ -17,7 +27,7 @@ public class ThreeInARowController extends RowGameController {
         Arrays.stream(gameModel.blocksData[gameModel.blocksData.length - 1])
                 .forEach(block -> block.setIsLegalMove(true));
         gameModel.player = RowGamePlayer.PLAYER_1;
-        gameModel.movesLeft = 9;
+        gameModel.movesLeft = rows * cols;
         gameModel.setFinalResult(null);
 //        gameView.update(gameModel);
     }
@@ -32,6 +42,6 @@ public class ThreeInARowController extends RowGameController {
         List<RowBlockModel> flatBlocks = Arrays.stream(this.gameModel.blocksData)
                 .flatMap(Arrays::stream)
                 .collect(Collectors.toList());
-        return Collections.singletonList(flatBlocks.get(currentPosition - 3 >= 0 ? currentPosition - 3 : currentPosition));
+        return Collections.singletonList(flatBlocks.get(currentPosition - gameModel.rows >= 0 ? currentPosition - gameModel.rows : currentPosition));
     }
 }

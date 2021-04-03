@@ -28,13 +28,15 @@ import view.RowGameGUI;
 public abstract class RowGameController {
 
     public RowGameModel gameModel;
-
-
+    public int rows;
+    public int cols;
     /**
      * Creates a new game initializing the GUI.
      */
-    public RowGameController() {
-	gameModel = new RowGameModel();
+    public RowGameController(int rows, int cols) {
+    	this.rows = rows;
+    	this.cols = cols;
+	gameModel = new RowGameModel(rows, cols);
 	
 	resetGame();
     }
@@ -50,19 +52,19 @@ public abstract class RowGameController {
      */
     public void move(JButton block) {
 	RowGamePlayer player = gameModel.player;
-	System.out.println(block);
 	this.gameModel.moveCompleted();
 	List<Integer> currentPositionString = parsePositionString(block.getActionCommand());
 	int row = currentPositionString.get(0);
 	int column = currentPositionString.get(1);
+	System.out.println("ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[" + row + "][" + column + "]);");
 	RowBlockModel currentBlock = this.gameModel.blocksData[row][column];
 	if(!currentBlock.getIsLegalMove())
 		throw new IllegalArgumentException("Not a legal move");
-	if(row >= 3 || column >= 3)
+	if(row >= gameModel.rows || column >= gameModel.cols)
 		throw new IllegalArgumentException("Outside board dimensions");
 	currentBlock.setContents(player == RowGamePlayer.PLAYER_1 ? "X" : "0");
 	gameModel.player = togglePlayer(gameModel.player);
-	List<RowBlockModel> legalBlocks = this.getLegalBlocks(row * 3 + column);
+	List<RowBlockModel> legalBlocks = this.getLegalBlocks(row * gameModel.rows + column);
 	legalBlocks.forEach(legalblock -> legalblock.setIsLegalMove(true));
 	currentBlock.setIsLegalMove(false);
 	RowGamePlayer winner = this.isWin();
@@ -91,8 +93,8 @@ public abstract class RowGameController {
      * Ends the game disallowing further player turns.
      */
     public void endGame() {
-	for(int row = 0;row<3;row++) {
-	    for(int column = 0;column<3;column++) {
+	for(int row = 0;row< gameModel.rows;row++) {
+	    for(int column = 0;column< gameModel.cols;column++) {
 		this.gameModel.blocksData[row][column].setIsLegalMove(false);
 	    }
 	}
@@ -125,7 +127,7 @@ public abstract class RowGameController {
 		* Rule #1 : if all columns are the same
 		* TODO : Remove 3x3 hardcoding
 		* */
-		int rows = 3;
+		int rows = gameModel.rows;
 		for(int currentRow = 0; currentRow < rows; currentRow++){
 			int finalCurrentRow = currentRow;
 			List<String> filteredBlockContent = Arrays.stream(gameModel.blocksData)

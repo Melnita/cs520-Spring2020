@@ -10,6 +10,16 @@ import java.util.stream.Collectors;
 
 public class TicTacToeController extends RowGameController{
 
+    /**
+     * Creates a new game initializing the GUI.
+     *
+     * @param rows
+     * @param cols
+     */
+    public TicTacToeController(int rows, int cols) {
+        super(rows, cols);
+    }
+
     @Override
     public void resetGame() {
         Arrays.stream(gameModel.blocksData)
