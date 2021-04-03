@@ -15,6 +15,7 @@ import javax.swing.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
@@ -178,6 +179,58 @@ public class TestExample {
         threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[0][2]);
         threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[0][0]);
         assertTrue(threeInARowGame.isWin() == null && threeInARowGameModel.movesLeft == 0); // null if Tie
+    }
+
+    @Test
+    public void verifyResetThreeInARow(){
+        threeInARowGame.move(threeInARowGameGUI.gameBoardView.blocks[2][0]);
+        threeInARowGame.resetGame();
+        assertTrue(threeInARowGameModel.getBlock(2, 0).getIsLegalMove());
+    }
+
+    @Test
+    public void verifyResetTicTacToe(){
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][0]);
+        ticTacToeGame.resetGame();
+        assertTrue(ticTacToeGameModel.getBlock(0, 0).getIsLegalMove());
+    }
+
+    @Test
+    public void verifyGameModelInitialState(){
+        Arrays.asList(threeInARowGameModel, ticTacToeGameModel).forEach(model -> {
+            assertEquals(9, model.movesLeft);
+            assertEquals(RowGamePlayer.PLAYER_1, model.player);
+        });
+    }
+
+    @Test
+    public void verifyTicTacToeInitialBlocks(){
+        assertTrue(Arrays.stream(ticTacToeGameModel.blocksData)
+                .flatMap(Arrays::stream)
+                .map(RowBlockModel::getIsLegalMove)
+                .reduce(true, (subtotal, element) -> subtotal && element));
+    }
+
+    @Test
+    public void verifyThreeInARowInitialBlocks(){
+        assertTrue(Arrays.stream(threeInARowGameModel.blocksData[2])
+                .map(RowBlockModel::getIsLegalMove)
+                .reduce(true, (subtotal, element) -> subtotal && element));
+        IntStream.range(0, 2).forEach(i -> {
+            assertFalse(Arrays.stream(threeInARowGameModel.blocksData[i])
+                    .peek(System.out::println)
+                    .map(RowBlockModel::getIsLegalMove)
+                    .reduce(Boolean::logicalAnd).get());
+        });
+    }
+
+    @Test
+    public void verifyGameGUI(){
+        threeInARowGame.move(ticTacToeGameGUI.gameBoardView.blocks[2][0]);
+        assertEquals("Player 2 to play 'O'", ((JTextArea) threeInARowGameGUI.gameStatusView.messages.getComponent(0)).getText());
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][0]);
+        ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[0][1]);
+        assertEquals("Player 1 to play 'X'", ((JTextArea) ticTacToeGameGUI.gameStatusView.messages.getComponent(0)).getText());
     }
 
     private List<JButton> getJButtonsfromMoves(JButton[][] blocks, int[][] moves){

@@ -15,7 +15,7 @@ public class RowGameGUI implements RowGameView
     JFrame gui = new JFrame(RowGameMessage.ROWGAME_NAME);
     public RowGameBoardView gameBoardView;
     JButton reset = new JButton(RowGameMessage.ROWGAME_RESET);
-    RowGameStatusView gameStatusView;
+    public RowGameStatusView gameStatusView; // TODO : Make private and create getters / setters
     
     RowGameController gameController;
 
