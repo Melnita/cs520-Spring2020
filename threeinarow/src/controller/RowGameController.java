@@ -19,22 +19,22 @@ import model.RowGamePlayer;
  */
 public abstract class RowGameController {
 
-    public RowGameModel gameModel;
-    public int rows;
-    public int cols;
+    private RowGameModel gameModel;
+    private int rows;
+    private int cols;
     /**
      * Creates a new game initializing the GUI.
      */
     public RowGameController(int rows, int cols) {
-    	this.rows = rows;
-    	this.cols = cols;
-	gameModel = new RowGameModel(rows, cols);
+    	this.setRows(rows);
+    	this.setCols(cols);
+	setGameModel(new RowGameModel(rows, cols));
 	
 	resetGame();
     }
 
     public RowGameModel getModel() {
-	return this.gameModel;
+	return this.getGameModel();
     }
 
     /**
@@ -44,36 +44,36 @@ public abstract class RowGameController {
 	 * @param column col position which was clicked
      */
     public void move(int row, int column) {
-	RowGamePlayer player = gameModel.player;
-	this.gameModel.moveCompleted();
+	RowGamePlayer player = getGameModel().player;
+	this.getGameModel().moveCompleted();
 	System.out.println("ticTacToeGame.move(ticTacToeGameGUI.gameBoardView.blocks[" + row + "][" + column + "]);");
-	RowBlockModel currentBlock = this.gameModel.getBlocksData()[row][column];
+	RowBlockModel currentBlock = this.getGameModel().getBlocksData()[row][column];
 	if(!currentBlock.getIsLegalMove())
 		throw new IllegalArgumentException("Not a legal move");
-	if(row >= gameModel.getRows() || column >= gameModel.getCols())
+	if(row >= getGameModel().getRows() || column >= getGameModel().getCols())
 		throw new IllegalArgumentException("Outside board dimensions");
 	currentBlock.setContents(player == RowGamePlayer.PLAYER_1 ? "X" : "0");
-	gameModel.player = togglePlayer(gameModel.player);
-	List<RowBlockModel> legalBlocks = this.getLegalBlocks(row * gameModel.getCols() + column);
+	getGameModel().player = togglePlayer(getGameModel().player);
+	List<RowBlockModel> legalBlocks = this.getLegalBlocks(row * getGameModel().getCols() + column);
 	legalBlocks.forEach(legalblock -> legalblock.setIsLegalMove(true));
 	currentBlock.setIsLegalMove(false);
 	RowGamePlayer winner = this.isWin();
-	gameModel.setFinalResult(null);
+	getGameModel().setFinalResult(null);
 	if(winner == null){
 		if(isTie()){
 			this.endGame();
-			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
+			getGameModel().setFinalResult(RowGameMessage.GAME_END_NOWINNER);
 		}
 	}
 	else {
 		switch (winner) {
 			case PLAYER_1:
 				this.endGame();
-				gameModel.setFinalResult(RowGameMessage.PLAYER_1_WINS);
+				getGameModel().setFinalResult(RowGameMessage.PLAYER_1_WINS);
 				break;
 			case PLAYER_2:
 				this.endGame();
-				gameModel.setFinalResult(RowGameMessage.PLAYER_2_WINS);
+				getGameModel().setFinalResult(RowGameMessage.PLAYER_2_WINS);
 				break;
 		}
 	}
@@ -83,9 +83,9 @@ public abstract class RowGameController {
      * Ends the game disallowing further player turns.
      */
     public void endGame() {
-	for(int row = 0; row< gameModel.getRows(); row++) {
-	    for(int column = 0;column< gameModel.getCols();column++) {
-		this.gameModel.getBlocksData()[row][column].setIsLegalMove(false);
+	for(int row = 0; row< getGameModel().getRows(); row++) {
+	    for(int column = 0; column< getGameModel().getCols(); column++) {
+		this.getGameModel().getBlocksData()[row][column].setIsLegalMove(false);
 	    }
 	}
 //	gameView.update(gameModel);
@@ -98,6 +98,30 @@ public abstract class RowGameController {
 
     public RowGamePlayer togglePlayer(RowGamePlayer player){
     	return player == RowGamePlayer.PLAYER_1 ? RowGamePlayer.PLAYER_2 : RowGamePlayer.PLAYER_1 ;
+	}
+
+	public RowGameModel getGameModel() {
+		return gameModel;
+	}
+
+	public void setGameModel(RowGameModel gameModel) {
+		this.gameModel = gameModel;
+	}
+
+	public int getRows() {
+		return rows;
+	}
+
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+
+	public int getCols() {
+		return cols;
+	}
+
+	public void setCols(int cols) {
+		this.cols = cols;
 	}
 
 	static class RowGameMessage {
@@ -117,26 +141,26 @@ public abstract class RowGameController {
 		* Rule #1 : if all columns are the same
 		* TODO : Remove 3x3 hardcoding
 		* */
-		for(int currentRow = 0; currentRow < cols; currentRow++){
+		for(int currentRow = 0; currentRow < getCols(); currentRow++){
 			int finalCurrentRow = currentRow;
-			List<String> filteredBlockContent = Arrays.stream(gameModel.getBlocksData())
+			List<String> filteredBlockContent = Arrays.stream(getGameModel().getBlocksData())
 					.map(row -> row[finalCurrentRow].getContents())
 					.filter(blockContent -> !blockContent.equals(""))
 					.collect(Collectors.toList());
-			if(filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == rows) {
+			if(filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == getRows()) {
 				return mapStringtoWinner(filteredBlockContent.stream().distinct().findFirst().get());
 			}
 		}
 		/*
 		* Rule #2 : if all rows are the same
 		* */
-		winnerString = Arrays.stream(gameModel.getBlocksData())
+		winnerString = Arrays.stream(getGameModel().getBlocksData())
 				.map(row -> {
 					List<String> filteredBlockContent = Arrays.stream(row)
 							.map(RowBlockModel::getContents)
 							.filter(blockContent -> !blockContent.equals(""))
 							.collect(Collectors.toList());
-					if(filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == cols) return filteredBlockContent.stream().distinct().findFirst().get();
+					if(filteredBlockContent.stream().distinct().count() == 1 && filteredBlockContent.size() == getCols()) return filteredBlockContent.stream().distinct().findFirst().get();
 					return null;
 				})
 				.filter(Objects::nonNull)
@@ -145,18 +169,18 @@ public abstract class RowGameController {
 		/*
 		 * Rule #3 : if all diagonals are the same
 		 * */
-		if(rows == cols) {
-			List<String> diagonalElementsRight = IntStream.range(0, rows)
-					.mapToObj(i -> gameModel.getBlocksData()[i][i].getContents())
+		if(getRows() == getCols()) {
+			List<String> diagonalElementsRight = IntStream.range(0, getRows())
+					.mapToObj(i -> getGameModel().getBlocksData()[i][i].getContents())
 					.filter(blockContent -> !blockContent.equals(""))
 					.collect(Collectors.toList());
-			if (diagonalElementsRight.stream().distinct().count() == 1 && diagonalElementsRight.size() == rows)
+			if (diagonalElementsRight.stream().distinct().count() == 1 && diagonalElementsRight.size() == getRows())
 				winnerString = diagonalElementsRight.stream().distinct().findFirst().get();
-			List<String> diagonalElementsLeft = IntStream.range(0, rows)
-					.mapToObj(i -> gameModel.getBlocksData()[i][rows - 1 - i].getContents())
+			List<String> diagonalElementsLeft = IntStream.range(0, getRows())
+					.mapToObj(i -> getGameModel().getBlocksData()[i][getRows() - 1 - i].getContents())
 					.filter(blockContent -> !blockContent.equals(""))
 					.collect(Collectors.toList());
-			if (diagonalElementsLeft.stream().distinct().count() == 1 && diagonalElementsLeft.size() == rows)
+			if (diagonalElementsLeft.stream().distinct().count() == 1 && diagonalElementsLeft.size() == getRows())
 				winnerString = diagonalElementsLeft.stream().distinct().findFirst().get();
 
 		}
@@ -164,7 +188,7 @@ public abstract class RowGameController {
 	}
 
 	public boolean isTie(){
-		return gameModel.movesLeft == 0;
+		return getGameModel().movesLeft == 0;
 	}
 
 	abstract List<RowBlockModel> getLegalBlocks(int currentPosition);

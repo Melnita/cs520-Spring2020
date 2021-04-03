@@ -21,21 +21,21 @@ public class TicTacToeController extends RowGameController{
 
     @Override
     public void resetGame() {
-        Arrays.stream(gameModel.getBlocksData())
+        Arrays.stream(getGameModel().getBlocksData())
                 .flatMap(Arrays::stream)
                 .forEach(block -> {
                     block.reset();
                     block.setIsLegalMove(true);
                 });
-        gameModel.player = RowGamePlayer.PLAYER_1;
-        gameModel.movesLeft = rows * cols;
-        gameModel.setFinalResult(null);
+        getGameModel().player = RowGamePlayer.PLAYER_1;
+        getGameModel().movesLeft = getRows() * getCols();
+        getGameModel().setFinalResult(null);
 //        gameView.update(gameModel);
     }
 
     @Override
     List<RowBlockModel> getLegalBlocks(int currentPosition) {
-        return Arrays.stream(this.gameModel.getBlocksData())
+        return Arrays.stream(this.getGameModel().getBlocksData())
                 .flatMap(Arrays::stream)
                 .filter(block -> block.getContents().equals(""))
                 .collect(Collectors.toList());

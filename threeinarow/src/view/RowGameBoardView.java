@@ -21,10 +21,10 @@ public class RowGameBoardView implements RowGameView
     public RowGameBoardView(RowGameController gameController) {
 	super();
 
-        JPanel game = new JPanel(new GridLayout(gameController.rows, gameController.cols));
+        JPanel game = new JPanel(new GridLayout(gameController.getRows(), gameController.getCols()));
         getGamePanel().add(game, BorderLayout.CENTER);
-        int rows = gameController.rows;
-        int cols = gameController.cols;
+        int rows = gameController.getRows();
+        int cols = gameController.getCols();
         setBlocks(new JButton[rows][cols]);
        // Initialize a JButton for each cell of the 3x3 game board.
         for(int row = 0; row<rows; row++) {

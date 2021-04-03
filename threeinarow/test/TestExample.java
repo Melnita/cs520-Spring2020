@@ -33,11 +33,11 @@ public class TestExample {
     @Before
     public void setUp() {
         threeInARowGame = new ThreeInARowController(3, 3);
-        threeInARowGameModel = threeInARowGame.gameModel;
+        threeInARowGameModel = threeInARowGame.getGameModel();
         threeInARowGameGUI = new RowGameGUI(threeInARowGame);
 
         ticTacToeGame = new TicTacToeController(3, 3);
-        ticTacToeGameModel = ticTacToeGame.gameModel;
+        ticTacToeGameModel = ticTacToeGame.getGameModel();
         ticTacToeGameGUI = new RowGameGUI(ticTacToeGame);
     }
 
