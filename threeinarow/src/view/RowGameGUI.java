@@ -12,7 +12,7 @@ import controller.RowGameController;
 
 public class RowGameGUI implements RowGameView
 {
-    JFrame gui = new JFrame(RowGameMessage.ROWGAME_NAME);
+    JFrame gui = new JFrame("");
     public RowGameBoardView gameBoardView;
     JButton reset = new JButton(RowGameMessage.ROWGAME_RESET);
     public RowGameStatusView gameStatusView; // TODO : Make private and create getters / setters
@@ -29,7 +29,7 @@ public class RowGameGUI implements RowGameView
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.setSize(new Dimension(350/3 * gameController.gameModel.rows, 300/3 * gameController.gameModel.cols));
         gui.setResizable(true);
-
+        gui.setTitle(gameController.getGameName());
 	gameBoardView = new RowGameBoardView(this.gameController);
         JPanel gamePanel = gameBoardView.gamePanel;
 

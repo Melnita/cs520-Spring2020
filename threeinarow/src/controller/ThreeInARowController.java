@@ -44,4 +44,9 @@ public class ThreeInARowController extends RowGameController {
                 .collect(Collectors.toList());
         return Collections.singletonList(flatBlocks.get(currentPosition - gameModel.rows >= 0 ? currentPosition - gameModel.rows : currentPosition));
     }
+
+    @Override
+    public String getGameName() {
+        return "Three in a Row";
+    }
 }

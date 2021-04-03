@@ -188,4 +188,6 @@ public abstract class RowGameController {
 				.collect(Collectors.toList());
 	}
 
+	public abstract String getGameName();
+
 }

@@ -41,4 +41,9 @@ public class TicTacToeController extends RowGameController{
                 .filter(block -> block.getContents().equals(""))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public String getGameName() {
+        return "Tic Tac Toe";
+    }
 }
