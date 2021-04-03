@@ -29,7 +29,7 @@ public class TicTacToeController extends RowGameController{
                     block.setIsLegalMove(true);
                 });
         gameModel.player = RowGamePlayer.PLAYER_1;
-        gameModel.movesLeft = 9;
+        gameModel.movesLeft = rows * cols;
         gameModel.setFinalResult(null);
 //        gameView.update(gameModel);
     }
