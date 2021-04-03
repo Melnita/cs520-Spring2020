@@ -14,7 +14,12 @@ This is a basic Java implementation of the Three in a Row game.
 ### How to run (from Terminal):
 
 1. After building the project (i.e., running `ant`), run the following command in the threeinarow folder:
-   `java -cp bin RowGameApp`
+   ```shell
+   java -cp bin RowGameApp ThreeInARow 3 3 # for ThreeInARow 3x3 game
+   ```
+   ```shell
+   java -cp bin RowGameApp TicTacToe 3 3 # for TicTacToe 3x3 game
+   ```
 
 ### How to clean up (from Terminal):
 
