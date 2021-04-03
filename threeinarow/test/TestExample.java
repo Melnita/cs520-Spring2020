@@ -159,7 +159,7 @@ public class TestExample {
         ticTacToeGame.move(0,1);
         ticTacToeGame.move(0,2);
         ticTacToeGame.move(0,0);
-        assertTrue(ticTacToeGame.isWin() == null && ticTacToeGameModel.movesLeft == 0); // null if Tie
+        assertTrue(ticTacToeGame.isTie()); // null if Tie
     }
 
     @Test
@@ -178,7 +178,7 @@ public class TestExample {
         threeInARowGame.move(1,2);
         threeInARowGame.move(0,2);
         threeInARowGame.move(0,0);
-        assertTrue(threeInARowGame.isWin() == null && threeInARowGameModel.movesLeft == 0); // null if Tie
+        assertTrue(threeInARowGame.isTie()); // null if Tie
     }
 
     @Test

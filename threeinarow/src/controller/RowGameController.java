@@ -68,7 +68,7 @@ public abstract class RowGameController {
 	RowGamePlayer winner = this.isWin();
 	gameModel.setFinalResult(null);
 	if(winner == null){
-		if(gameModel.movesLeft == 0){
+		if(isTie()){
 			this.endGame();
 			gameModel.setFinalResult(RowGameMessage.GAME_END_NOWINNER);
 		}
@@ -169,6 +169,10 @@ public abstract class RowGameController {
 
 		}
 		return mapStringtoWinner(winnerString);
+	}
+
+	public boolean isTie(){
+		return gameModel.movesLeft == 0;
 	}
 
 	abstract List<RowBlockModel> getLegalBlocks(int currentPosition);
